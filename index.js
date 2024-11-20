@@ -28,6 +28,7 @@ class Validator {
     };
     return emailValidator;
   }
+
   age() {
     const ageValidator = {
       isValid(value) {
@@ -44,22 +45,32 @@ class Validator {
     };
     return ageValidator;
   }
+
   user() {
     const userValidator = {
       shape(fields) {
-        this.schema = fields;
+        this.schema = {...fields};
         return this;
       },
       isValid(user) {
         console.log('User isValid check:', user);
-        for (const key of Object.keys(this.schema)) {
-          const validator = this.schema[key];
-          if (!validator.isValid(user[key])) {
-            console.log(`Validation failed for ${key} with value ${user[key]}`);
-            return false;
-          }
-        }
-        return true;
+        const check = Object.keys(this.schema).map((key) => this.schema[key].isValid(user[key]));
+        // const validator = this.schema[key];
+        // if (!validator.isValid(user[key])) {
+        //   console.log(`Validation failed for ${key} with value ${user[key]}`);
+        //   return false;
+        // }
+        // return true;
+        console.log(check);
+        return !(check.includes(false));
+        // for (const key of Object.keys(this.schema)) {
+        //   const validator = this.schema[key];
+        //   if (!validator.isValid(user[key])) {
+        //     console.log(`Validation failed for ${key} with value ${user[key]}`);
+        //     return false;
+        //   }
+        // }
+        // return true;
       },
     };
     return userValidator;
