@@ -49,7 +49,7 @@ class Validator {
   user() {
     const userValidator = {
       shape(fields) {
-        this.schema = {...fields};
+        this.schema = { ...fields };
         return this;
       },
       isValid(user) {
