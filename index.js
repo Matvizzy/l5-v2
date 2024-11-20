@@ -5,13 +5,21 @@ class Validator {
   email() {
     const emailValidator = {
       isValid(value) {
+        console.log('Email isValid check:', value);
         return typeof value === 'string' && value.includes('@');
       },
       setEmailLengthConstraint(minLength, maxLength) {
         this.isValid = (value) => {
+          console.log('Email Length Constraint check:', value);
           const localPart = value.split('@')[0];
-          if (minLength && localPart.length < minLength) return false;
-          if (maxLength && localPart.length > maxLength) return false;
+          if (minLength && localPart.length < minLength) {
+            console.log(`Email length is less than ${minLength}`);
+            return false;
+          }
+          if (maxLength && localPart.length > maxLength) {
+            console.log(`Email length is greater than ${maxLength}`);
+            return false;
+          }
           return typeof value === 'string' && value.includes('@');
         };
         return this;
@@ -19,19 +27,26 @@ class Validator {
     };
     return emailValidator;
   }
+
+  // Валидация возраста
   age() {
     const ageValidator = {
       isValid(value) {
-        return typeof value === 'number' && !isNaN(value);
+        console.log('Age isValid check:', value);
+        return typeof value === 'number' && !Number.isNaN(value); // Используем Number.isNaN
       },
       isAdult() {
-        this.isValid = (value) =>
-          typeof value === 'number' && value >= 18;
+        this.isValid = (value) => {
+          console.log('Age isAdult check:', value);
+          return typeof value === 'number' && value >= 18;
+        };
         return this;
       },
     };
     return ageValidator;
   }
+
+  // Валидация пользователя
   user() {
     const userValidator = {
       shape(fields) {
@@ -39,9 +54,13 @@ class Validator {
         return this;
       },
       isValid(user) {
-        for (const key in this.schema) {
+        console.log('User isValid check:', user);
+        // Используем Object.keys для перебора ключей объекта
+        for (const key of Object.keys(this.schema)) {
           const validator = this.schema[key];
+          // Если валидатор для поля не прошел валидацию, возвращаем false
           if (!validator.isValid(user[key])) {
+            console.log(`Validation failed for ${key} with value ${user[key]}`);
             return false;
           }
         }
@@ -51,5 +70,4 @@ class Validator {
     return userValidator;
   }
 }
-
 export default Validator;
