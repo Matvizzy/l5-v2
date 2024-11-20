@@ -2,6 +2,7 @@ class Validator {
   constructor() {
     this.schema = {};
   }
+
   email() {
     const emailValidator = {
       isValid(value) {
@@ -27,8 +28,6 @@ class Validator {
     };
     return emailValidator;
   }
-
-  // Валидация возраста
   age() {
     const ageValidator = {
       isValid(value) {
@@ -45,8 +44,6 @@ class Validator {
     };
     return ageValidator;
   }
-
-  // Валидация пользователя
   user() {
     const userValidator = {
       shape(fields) {
@@ -55,10 +52,8 @@ class Validator {
       },
       isValid(user) {
         console.log('User isValid check:', user);
-        // Используем Object.keys для перебора ключей объекта
         for (const key of Object.keys(this.schema)) {
           const validator = this.schema[key];
-          // Если валидатор для поля не прошел валидацию, возвращаем false
           if (!validator.isValid(user[key])) {
             console.log(`Validation failed for ${key} with value ${user[key]}`);
             return false;
